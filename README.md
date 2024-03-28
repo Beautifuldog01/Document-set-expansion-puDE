@@ -2,6 +2,16 @@
 
 This repository contains the code for the paper ["Document Set Expansion with Positive-Unlabelled Learning Using Intractable Density Estimation" (COLING 2024)](https://arxiv.org/pdf/2403.17473.pdf).
 
+## Abstract
+
+The Document Set Expansion (DSE) task involves identifying relevant documents from large collections based
+on a limited set of example documents. Previous research has highlighted Positive and Unlabeled (PU) learning
+as a promising approach for this task. However, most PU methods rely on the unrealistic assumption of
+knowing the class prior for positive samples in the collection. To address this limitation, this paper introduces
+a novel PU learning framework that utilizes intractable density estimation models. Experiments conducted
+on PubMed and Covid datasets in a transductive setting showcase the effectiveness of the proposed method
+for DSE. Code is available from https://github.com/Beautifuldog01/Document-set-expansion-puDE.
+
 <img width="834" alt="image" src="https://github.com/Beautifuldog01/Document-set-expansion-puDE/assets/40363660/bf505cd5-a124-40d6-a4bc-6eb571ca4bf5">
 
 ## Requirements
