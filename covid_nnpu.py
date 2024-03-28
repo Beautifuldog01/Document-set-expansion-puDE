@@ -34,13 +34,14 @@ def train_nnpu_on_covid(
     num_epochs,
     covid_models,
     runs_dir,
+    bertmodel,
 ):
     set_seed(random_state)
     os.makedirs(covid_models, exist_ok=True)
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
     print(f"Using device: {device}")
-    Bertmodel = AutoModel.from_pretrained("allenai/scibert_scivocab_uncased")
-    tokenizer = AutoTokenizer.from_pretrained("allenai/scibert_scivocab_uncased")
+    Bertmodel = AutoModel.from_pretrained(bertmodel)
+    tokenizer = AutoTokenizer.from_pretrained(bertmodel)
     Bertmodel = Bertmodel.to(device)
 
     TrainingIncludes = read_ris_file(data_dir, "1_Training_Included_20878.ris.txt")
@@ -224,6 +225,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--runs_dir", type=str, help="Directory to save tensorboard logs"
     )
+    parser.add_argument(
+        "--bertmodel",
+        type=str,
+        default="pretrained/allenai/scibert_scivocab_uncased",
+        help="Path to the pretrained bert model",
+    )
     args = parser.parse_args()
     train_nnpu_on_covid(
         args.data_dir,
@@ -236,7 +243,10 @@ if __name__ == "__main__":
         args.num_epochs,
         args.covid_models,
         args.runs_dir,
+        args.bertmodel,
     )
+    """python covid_nnpu.py --data_dir /root/autodl-tmp/Document-set-expansion-puDE/data/Cochrane_Covid-19 --settings_mode 3 --num_lp 50 --random_state 42 --batch_size 24 --prior 0.5 --learning_rate 3e-6 --num_epochs 10 --covid_models saved_models/nnPU/ --runs_dir runs/ --bertmodel pretrained/allenai/scibert_scivocab_uncased
+    """
     # data_dir = r"/home/dudu/all/PU_all_in_one/data/Cochrane_COVID-19"
     # settings_mode = 3
     # num_lp = 50

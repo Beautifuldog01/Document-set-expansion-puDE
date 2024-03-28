@@ -2,6 +2,7 @@ runs/*
 data/Cochrane_Covid-19/*
 data/pubmed-dse/*
 saved_models/*
+pretrained/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
