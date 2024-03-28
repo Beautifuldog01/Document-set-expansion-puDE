@@ -2,6 +2,7 @@ import os
 import numpy as np
 import math
 import torch
+import argparse
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoModel, AutoTokenizer
@@ -23,27 +24,27 @@ from utils import set_seed
 
 
 def train_vpu_on_covid(
-        data_dir,
-        settings_mode,
-        num_lp,
-        random_state,
-        batch_size,
-        bertmodelpath,
-        filepath,
-        learning_rate,
-        lam,
-        mix_alpha,
-        epochs,
-        val_iterations,
-        # hidden_size,
-        # EPOCHS,
-        # post_lr,
-        # prior_lr,
-        # cls_loss_weight,
-        # post_loss_weight,
-        # prior_loss_weight,
-        # covid_models,
-        # runs_dir,
+    data_dir,
+    settings_mode,
+    num_lp,
+    random_state,
+    batch_size,
+    bertmodelpath,
+    filepath,
+    learning_rate,
+    lam,
+    mix_alpha,
+    epochs,
+    val_iterations,
+    # hidden_size,
+    # EPOCHS,
+    # post_lr,
+    # prior_lr,
+    # cls_loss_weight,
+    # post_loss_weight,
+    # prior_loss_weight,
+    # covid_models,
+    # runs_dir,
 ):
     set_seed(random_state)
 
@@ -210,17 +211,105 @@ def train_vpu_on_covid(
 
 
 if __name__ == "__main__":
-    train_vpu_on_covid(
-        data_dir=r"/root/autodl-tmp/PU_all_in_one/data/Cochrane_Covid-19",
-        settings_mode=3,
-        num_lp=50,
-        random_state=42,
-        batch_size=32,
-        bertmodelpath=r"/root/autodl-tmp/PU_all_in_one/pretrained/allenai/scibert_scivocab_uncased",
-        filepath=r"/root/autodl-tmp/PU_all_in_one/saved_models/covid_task/VPU/vpu_model_ckpt.pth",
-        learning_rate=3e-5,
-        lam=0.1,
-        mix_alpha=0.1,
-        epochs=10,
-        val_iterations=20,
+    parser = argparse.ArgumentParser(description="Train vpu model on COVID-19 dataset")
+    parser.add_argument(
+        "--data_dir",
+        type=str,
+        help="Directory containing the COVID-19 dataset",
+        default="data/Cochrane_Covid-19",
     )
+    parser.add_argument(
+        "--settings_mode",
+        type=int,
+        help="Settings mode for the training",
+        default=3,
+    )
+    parser.add_argument(
+        "--num_lp",
+        type=int,
+        help="Number of labeled positive examples",
+        default=50,
+    )
+    parser.add_argument(
+        "--random_state",
+        type=int,
+        help="Random state for the training",
+        default=42,
+    )
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        help="Batch size for the training",
+        default=32,
+    )
+    parser.add_argument(
+        "--bertmodelpath",
+        type=str,
+        help="Path to the pretrained bert model",
+        default="pretrained/allenai/scibert_scivocab_uncased",
+    )
+    parser.add_argument(
+        "--filepath",
+        type=str,
+        help="Path to save the trained model",
+        default="saved_models/covid_task/VPU/vpu_model_ckpt.pth",
+    )
+    parser.add_argument(
+        "--learning_rate",
+        type=float,
+        help="Learning rate for the training",
+        default=3e-5,
+    )
+    parser.add_argument(
+        "--lam",
+        type=float,
+        help="Lambda value for the training",
+        default=0.1,
+    )
+    parser.add_argument(
+        "--mix_alpha",
+        type=float,
+        help="Alpha value for the training",
+        default=0.1,
+    )
+    parser.add_argument(
+        "--epochs",
+        type=int,
+        help="Number of epochs for the training",
+        default=10,
+    )
+    parser.add_argument(
+        "--val_iterations",
+        type=int,
+        help="Number of iterations for validation",
+        default=20,
+    )
+    args = parser.parse_args()
+    train_vpu_on_covid(
+        args.data_dir,
+        args.settings_mode,
+        args.num_lp,
+        args.random_state,
+        args.batch_size,
+        args.bertmodelpath,
+        args.filepath,
+        args.learning_rate,
+        args.lam,
+        args.mix_alpha,
+        args.epochs,
+        args.val_iterations,
+    )
+    # train_vpu_on_covid(
+    #     data_dir=r"/root/autodl-tmp/PU_all_in_one/data/Cochrane_Covid-19",
+    #     settings_mode=3,
+    #     num_lp=50,
+    #     random_state=42,
+    #     batch_size=32,
+    #     bertmodelpath=r"/root/autodl-tmp/PU_all_in_one/pretrained/allenai/scibert_scivocab_uncased",
+    #     filepath=r"/root/autodl-tmp/PU_all_in_one/saved_models/covid_task/VPU/vpu_model_ckpt.pth",
+    #     learning_rate=3e-5,
+    #     lam=0.1,
+    #     mix_alpha=0.1,
+    #     epochs=10,
+    #     val_iterations=20,
+    # )

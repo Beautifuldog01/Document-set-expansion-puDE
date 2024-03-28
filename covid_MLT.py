@@ -17,7 +17,7 @@ es = Elasticsearch("http://127.0.0.1:9200", verify_elasticsearch=False)
 health = es.cluster.health()
 print("cluster health:", health)
 
-data_dir = r"/root/autodl-tmp/PU_all_in_one/data/Cochrane_Covid-19"
+data_dir = r"data/Cochrane_Covid-19"
 settings_mode = 3
 num_lp = 50
 random_state = 42

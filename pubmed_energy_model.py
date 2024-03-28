@@ -1,5 +1,6 @@
 import os
 import torch
+import argparse
 from tqdm import tqdm
 from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import DataLoader
@@ -25,6 +26,7 @@ from utils import (
 
 
 def train_em_on_pubmed(
+    data_dir,
     batch_size,
     num_epochs,
     experiment_list,
@@ -37,20 +39,18 @@ def train_em_on_pubmed(
     post_loss_weight,
     prior_loss_weight,
     runs_dir,
+    bert_model_path,
 ):
     set_seed(seed)
-    bert_model_path = (
-        r"/root/autodl-tmp/PU_all_in_one/pretrained/allenai/scibert_scivocab_uncased"
-    )
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
     experiments = [
-        "/root/autodl-tmp/PU_all_in_one/data/pubmed-dse/L50/D000328.D008875.D015658",
-        "/root/autodl-tmp/PU_all_in_one/data/pubmed-dse/L50/D000818.D001921.D051381",
-        "/root/autodl-tmp/PU_all_in_one/data/pubmed-dse/L50/D006435.D007676.D008875",
-        "/root/autodl-tmp/PU_all_in_one/data/pubmed-dse/L20/D000328.D008875.D015658",
-        "/root/autodl-tmp/PU_all_in_one/data/pubmed-dse/L20/D000818.D001921.D051381",
-        "/root/autodl-tmp/PU_all_in_one/data/pubmed-dse/L20/D006435.D007676.D008875",
+        os.path.join(data_dir, "L50/D000328.D008875.D015658"),
+        os.path.join(data_dir, "L50/D000818.D001921.D051381"),
+        os.path.join(data_dir, "L50/D006435.D007676.D008875"),
+        os.path.join(data_dir, "L20/D000328.D008875.D015658"),
+        os.path.join(data_dir, "L20/D000818.D001921.D051381"),
+        os.path.join(data_dir, "L20/D006435.D007676.D008875"),
     ]
     expriment_names = [
         "AMH_L50",
@@ -301,17 +301,119 @@ def train_em_on_pubmed(
 
 
 if __name__ == "__main__":
-    train_em_on_pubmed(
-        batch_size=32,
-        num_epochs=10,
-        experiment_list=[1],
-        prior=0.5,
-        pubmed_models=r"/root/autodl-tmp/PU_all_in_one/saved_models/pubmed_models/",
-        seed=42,
-        post_lr=1e-4,
-        prior_lr=1e-4,
-        cls_loss_weight=1.0,
-        post_loss_weight=0.9,
-        prior_loss_weight=0.9,
-        runs_dir="/root/autodl-tmp/PU_all_in_one/",
+    parser = argparse.ArgumentParser(description="Train energy model on pubmed dataset")
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=32,
+        help="Batch size for training the model",
     )
+    parser.add_argument(
+        "--num_epochs",
+        type=int,
+        default=10,
+        help="Number of epochs for training the model",
+    )
+    parser.add_argument(
+        "--experiment_list",
+        type=list,
+        default=[1],
+        help="List of experiments to run",
+    )
+    parser.add_argument(
+        "--prior",
+        type=float,
+        default=0.5,
+        help="Prior probability of positive class",
+    )
+    parser.add_argument(
+        "--pubmed_models",
+        type=str,
+        default=r"saved_models/pubmed_models/",
+        help="Directory to save the trained models",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random seed for the training",
+    )
+    parser.add_argument(
+        "--post_lr",
+        type=float,
+        default=1e-4,
+        help="Learning rate for the post model",
+    )
+    parser.add_argument(
+        "--prior_lr",
+        type=float,
+        default=1e-4,
+        help="Learning rate for the prior model",
+    )
+    parser.add_argument(
+        "--cls_loss_weight",
+        type=float,
+        default=1.0,
+        help="Weight for the classification loss",
+    )
+    parser.add_argument(
+        "--post_loss_weight",
+        type=float,
+        default=0.9,
+        help="Weight for the post model loss",
+    )
+    parser.add_argument(
+        "--prior_loss_weight",
+        type=float,
+        default=0.9,
+        help="Weight for the prior model loss",
+    )
+    parser.add_argument(
+        "--runs_dir",
+        type=str,
+        help="Directory to save tensorboard logs",
+    )
+    parser.add_argument(
+        "--bert_model_path",
+        type=str,
+        default=r"allenai/scibert_scivocab_uncased",
+        help="Directory to save tensorboard logs",
+    )
+    parser.add_argument(
+        "--data_dir",
+        type=str,
+        help="Directory containing the pubmed dataset",
+        default="data/pubmed-dse",
+    )
+    args = parser.parse_args()
+    train_em_on_pubmed(
+        args.data_dir,
+        args.batch_size,
+        args.num_epochs,
+        args.experiment_list,
+        args.prior,
+        args.pubmed_models,
+        args.seed,
+        args.post_lr,
+        args.prior_lr,
+        args.cls_loss_weight,
+        args.post_loss_weight,
+        args.prior_loss_weight,
+        args.runs_dir,
+        args.bert_model_path,
+    )
+    # train_em_on_pubmed(
+    #     batch_size=32,
+    #     num_epochs=10,
+    #     experiment_list=[1],
+    #     prior=0.5,
+    #     pubmed_models=r"/root/autodl-tmp/PU_all_in_one/saved_models/pubmed_models/",
+    #     seed=42,
+    #     post_lr=1e-4,
+    #     prior_lr=1e-4,
+    #     cls_loss_weight=1.0,
+    #     post_loss_weight=0.9,
+    #     prior_loss_weight=0.9,
+    #     runs_dir="/root/autodl-tmp/PU_all_in_one/",
+    #     bert_model_path=r"/root/autodl-tmp/PU_all_in_one/pretrained/allenai/scibert_scivocab_uncased",
+    # )

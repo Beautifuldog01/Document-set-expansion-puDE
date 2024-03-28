@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import torch
+import argparse
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
@@ -30,20 +31,20 @@ from utils import (
 
 
 def train_em_on_covid(
-        data_dir,
-        settings_mode,
-        num_lp,
-        random_state,
-        batch_size,
-        EPOCHS,
-        post_lr,
-        prior_lr,
-        cls_loss_weight,
-        post_loss_weight,
-        prior_loss_weight,
-        covid_models,
-        runs_dir,
-        bertmodel,
+    data_dir,
+    settings_mode,
+    num_lp,
+    random_state,
+    batch_size,
+    EPOCHS,
+    post_lr,
+    prior_lr,
+    cls_loss_weight,
+    post_loss_weight,
+    prior_loss_weight,
+    covid_models,
+    runs_dir,
+    bertmodel,
 ):
     set_seed(random_state)
     os.makedirs(covid_models, exist_ok=True)
@@ -187,9 +188,9 @@ def train_em_on_covid(
                 pos_out_post = post_model(pos_post)
                 neg_out_post = post_model(neg_post)
                 loss_post = (
-                        neg_out_post
-                        - pos_out_post
-                        + 0.1 * (pos_out_post ** 2 + neg_out_post ** 2)
+                    neg_out_post
+                    - pos_out_post
+                    + 0.1 * (pos_out_post**2 + neg_out_post**2)
                 ).mean()
             else:
                 loss_post = torch.tensor([0], dtype=torch.float32).to(device)
@@ -204,17 +205,17 @@ def train_em_on_covid(
                 pos_out_prior = prior_model(pos_prior)
                 neg_out_prior = prior_model(neg_prior)
                 loss_prior = (
-                        neg_out_prior
-                        - pos_out_prior
-                        + 0.1 * (pos_out_prior ** 2 + neg_out_prior ** 2)
+                    neg_out_prior
+                    - pos_out_prior
+                    + 0.1 * (pos_out_prior**2 + neg_out_prior**2)
                 ).mean()
             else:
                 loss_prior = torch.tensor([0], dtype=torch.float32).to(device)
 
             los_sum = (
-                    cls_loss_weight * cls_loss
-                    + post_loss_weight * loss_post
-                    + prior_loss_weight * loss_prior
+                cls_loss_weight * cls_loss
+                + post_loss_weight * loss_post
+                + prior_loss_weight * loss_prior
             )
             los_sum.backward()
             torch.nn.utils.clip_grad_norm_(post_model.parameters(), max_norm=0.1)
@@ -297,19 +298,105 @@ def train_em_on_covid(
 
 
 if __name__ == "__main__":
-    train_em_on_covid(
-        data_dir=r"/root/autodl-tmp/PU_all_in_one/data/Cochrane_Covid-19",
-        settings_mode=3,
-        num_lp=50,
-        random_state=42,
-        batch_size=32,
-        EPOCHS=30,
-        post_lr=5e-5,
-        prior_lr=5e-5,
-        cls_loss_weight=1,
-        post_loss_weight=0.9,
-        prior_loss_weight=0.9,
-        covid_models=r"/root/autodl-tmp/PU_all_in_one/saved_models",
-        runs_dir=r"/root/autodl-tmp/PU_all_in_one/",
-        bertmodel=r"/root/autodl-tmp/PU_all_in_one/pretrained/allenai/scibert_scivocab_uncased",
+    parser = argparse.ArgumentParser(
+        description="Train Energy Model on Covid-19 dataset"
     )
+    parser.add_argument(
+        "--data_dir",
+        type=str,
+        default=r"data/Cochrane_Covid-19",
+        help="Directory containing the data",
+    )
+    parser.add_argument(
+        "--settings_mode",
+        type=int,
+        default=3,
+        help="Settings mode for the training",
+    )
+    parser.add_argument(
+        "--num_lp", type=int, default=50, help="Number of labeled positive samples"
+    )
+    parser.add_argument(
+        "--random_state", type=int, default=42, help="Random state for reproducibility"
+    )
+    parser.add_argument(
+        "--batch_size", type=int, default=32, help="Batch size for training"
+    )
+    parser.add_argument(
+        "--EPOCHS", type=int, default=30, help="Number of epochs for training"
+    )
+    parser.add_argument(
+        "--post_lr", type=float, default=5e-5, help="Learning rate for post model"
+    )
+    parser.add_argument(
+        "--prior_lr", type=float, default=5e-5, help="Learning rate for prior model"
+    )
+    parser.add_argument(
+        "--cls_loss_weight",
+        type=float,
+        default=1,
+        help="Weight for classification loss",
+    )
+    parser.add_argument(
+        "--post_loss_weight",
+        type=float,
+        default=0.9,
+        help="Weight for post model loss",
+    )
+    parser.add_argument(
+        "--prior_loss_weight",
+        type=float,
+        default=0.9,
+        help="Weight for prior model loss",
+    )
+    parser.add_argument(
+        "--covid_models",
+        type=str,
+        default="saved_models",
+        help="Directory to save the models",
+    )
+    parser.add_argument(
+        "--runs_dir",
+        type=str,
+        default="runs",
+        help="Directory to save the tensorboard logs",
+    )
+    parser.add_argument(
+        "--bertmodel",
+        type=str,
+        default="pretrained/allenai/scibert_scivocab_uncased",
+        help="Path to the pretrained bert model",
+    )
+    args = parser.parse_args()
+    train_em_on_covid(
+        data_dir=args.data_dir,
+        settings_mode=args.settings_mode,
+        num_lp=args.num_lp,
+        random_state=args.random_state,
+        batch_size=args.batch_size,
+        EPOCHS=args.EPOCHS,
+        post_lr=args.post_lr,
+        prior_lr=args.prior_lr,
+        cls_loss_weight=args.cls_loss_weight,
+        post_loss_weight=args.post_loss_weight,
+        prior_loss_weight=args.prior_loss_weight,
+        covid_models=args.covid_models,
+        runs_dir=args.runs_dir,
+        bertmodel=args.bertmodel,
+    )
+    # train_em_on_covid(
+    #     data_dir=r"/root/autodl-tmp/PU_all_in_one/data/Cochrane_Covid-19",
+    #     settings_mode=3,
+    #     num_lp=50,
+    #     random_state=42,
+    #     batch_size=32,
+    #     EPOCHS=30,
+    #     post_lr=5e-5,
+    #     prior_lr=5e-5,
+    #     cls_loss_weight=1,
+    #     post_loss_weight=0.9,
+    #     prior_loss_weight=0.9,
+    #     covid_models=r"/root/autodl-tmp/PU_all_in_one/saved_models",
+    #     runs_dir=r"/root/autodl-tmp/PU_all_in_one/",
+    #     bertmodel=r"/root/autodl-tmp/PU_all_in_one/pretrained/allenai/scibert_scivocab_uncased",
+    # )

@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import torch
+import argparse
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
@@ -23,16 +24,16 @@ from utils import (
 
 
 def train_nnpu_on_covid(
-        data_dir,
-        settings_mode,
-        num_lp,
-        random_state,
-        batch_size,
-        prior,
-        learning_rate,
-        num_epochs,
-        covid_models,
-        runs_dir,
+    data_dir,
+    settings_mode,
+    num_lp,
+    random_state,
+    batch_size,
+    prior,
+    learning_rate,
+    num_epochs,
+    covid_models,
+    runs_dir,
 ):
     set_seed(random_state)
     os.makedirs(covid_models, exist_ok=True)
@@ -168,7 +169,6 @@ def train_nnpu_on_covid(
         val_prob = np.hstack(val_prob)
         npuu_eval_info_tuple = get_metric(labels=val_labels, prob=val_prob)
         log_metrics(writer, "Validation", npuu_eval_info_tuple, epoch)
-        npuu_val_threshold99 = npuu_eval_info_tuple[1]
         if npuu_eval_info_tuple[3] > best_va_f1:
             best_va_f1 = npuu_eval_info_tuple[3]
 
@@ -204,25 +204,59 @@ def train_nnpu_on_covid(
 
 
 if __name__ == "__main__":
-    data_dir = r"/home/dudu/all/PU_all_in_one/data/Cochrane_COVID-19"
-    settings_mode = 3
-    num_lp = 50
-    random_state = 42
-    batch_size = 24
-    prior = 0.5
-    learning_rate = 3e-6
-    num_epochs = 10
-    covid_models = r"/home/dudu/all/PU_all_in_one/covid_task/saved_models/nnPU/"
-    runs_dir = r"/home/dudu/all/PU_all_in_one/"
-    train_nnpu_on_covid(
-        data_dir,
-        settings_mode,
-        num_lp,
-        random_state,
-        batch_size,
-        prior,
-        learning_rate,
-        num_epochs,
-        covid_models,
-        runs_dir,
+    parser = argparse.ArgumentParser(description="Train nnPU model on COVID-19 dataset")
+    parser.add_argument(
+        "--data_dir", type=str, help="Directory containing the COVID-19 dataset"
     )
+    parser.add_argument("--settings_mode", type=int, help="Settings mode")
+    parser.add_argument(
+        "--num_lp", type=int, help="Number of labeled positive examples"
+    )
+    parser.add_argument("--random_state", type=int, help="Random seed")
+    parser.add_argument("--batch_size", type=int, help="Batch size")
+    parser.add_argument(
+        "--prior", type=float, help="Prior probability of positive class"
+    )
+    parser.add_argument("--learning_rate", type=float, help="Learning rate")
+    parser.add_argument("--num_epochs", type=int, help="Number of epochs")
+    parser.add_argument(
+        "--covid_models", type=str, help="Directory to save the trained models"
+    )
+    parser.add_argument(
+        "--runs_dir", type=str, help="Directory to save tensorboard logs"
+    )
+    args = parser.parse_args()
+    train_nnpu_on_covid(
+        args.data_dir,
+        args.settings_mode,
+        args.num_lp,
+        args.random_state,
+        args.batch_size,
+        args.prior,
+        args.learning_rate,
+        args.num_epochs,
+        args.covid_models,
+        args.runs_dir,
+    )
+    # data_dir = r"/home/dudu/all/PU_all_in_one/data/Cochrane_COVID-19"
+    # settings_mode = 3
+    # num_lp = 50
+    # random_state = 42
+    # batch_size = 24
+    # prior = 0.5
+    # learning_rate = 3e-6
+    # num_epochs = 10
+    # covid_models = r"/home/dudu/all/PU_all_in_one/covid_task/saved_models/nnPU/"
+    # runs_dir = r"/home/dudu/all/PU_all_in_one/"
+    # train_nnpu_on_covid(
+    #     data_dir,
+    #     settings_mode,
+    #     num_lp,
+    #     random_state,
+    #     batch_size,
+    #     prior,
+    #     learning_rate,
+    #     num_epochs,
+    #     covid_models,
+    #     runs_dir,
+    # )
