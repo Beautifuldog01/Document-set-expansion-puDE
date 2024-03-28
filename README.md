@@ -2,6 +2,8 @@
 
 This repository contains the code for the paper ["Document Set Expansion with Positive-Unlabelled Learning Using Intractable Density Estimation" (COLING 2024)](https://arxiv.org/pdf/2403.17473.pdf).
 
+<img width="834" alt="image" src="https://github.com/Beautifuldog01/Document-set-expansion-puDE/assets/40363660/bf505cd5-a124-40d6-a4bc-6eb571ca4bf5">
+
 ## Requirements
 
 The code is written in Python 3.10. To install the required packages, you need have [Conda](https://docs.anaconda.com/free/miniconda/) installed. You can then create a new environment with the required packages using the following command:
