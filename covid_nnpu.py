@@ -71,7 +71,6 @@ def train_nnpu_on_covid(
     tr_df, _, _ = pu_label_process_trans(
         TrainingDf, CalibrationDf, EvaluationDf, num_lp, random_state
     )
-    train_index = tr_df.query("tr == 1").index
     train_labels = tr_df.query("tr == 1")["pulabel"].values
     val_index = tr_df.query("ca == 1").index
     test_index = tr_df.query("ts == 1").index

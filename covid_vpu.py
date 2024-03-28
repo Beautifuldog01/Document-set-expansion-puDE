@@ -24,27 +24,27 @@ from utils import set_seed
 
 
 def train_vpu_on_covid(
-    data_dir,
-    settings_mode,
-    num_lp,
-    random_state,
-    batch_size,
-    bertmodelpath,
-    filepath,
-    learning_rate,
-    lam,
-    mix_alpha,
-    epochs,
-    val_iterations,
-    # hidden_size,
-    # EPOCHS,
-    # post_lr,
-    # prior_lr,
-    # cls_loss_weight,
-    # post_loss_weight,
-    # prior_loss_weight,
-    # covid_models,
-    # runs_dir,
+        data_dir,
+        settings_mode,
+        num_lp,
+        random_state,
+        batch_size,
+        bertmodelpath,
+        filepath,
+        learning_rate,
+        lam,
+        mix_alpha,
+        epochs,
+        val_iterations,
+        # hidden_size,
+        # EPOCHS,
+        # post_lr,
+        # prior_lr,
+        # cls_loss_weight,
+        # post_loss_weight,
+        # prior_loss_weight,
+        # covid_models,
+        # runs_dir,
 ):
     set_seed(random_state)
 
@@ -73,6 +73,9 @@ def train_vpu_on_covid(
         TrainingDf = parse_data(TrainingIncludes, TrainingExcludes)
         CalibrationDf = parse_data(CalibrationIncludes, CalibrationExcludes)
         EvaluationDf = parse_data(EvaluationIncludes, EvaluationExcludes)
+    else:
+        TrainingDf, CalibrationDf, EvaluationDf = None, None, None
+        print("Invalid settings mode.")
 
     tr_df, _, _ = pu_label_process_trans(
         TrainingDf, CalibrationDf, EvaluationDf, num_lp, random_state
