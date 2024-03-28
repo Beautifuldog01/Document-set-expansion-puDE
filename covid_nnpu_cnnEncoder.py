@@ -65,6 +65,9 @@ def train_nnpu_on_covid(
         TrainingDf = parse_data(TrainingIncludes, TrainingExcludes)
         CalibrationDf = parse_data(CalibrationIncludes, CalibrationExcludes)
         EvaluationDf = parse_data(EvaluationIncludes, EvaluationExcludes)
+    else:
+        TrainingDf, CalibrationDf, EvaluationDf = None, None, None
+        print("Invalid settings mode.")
 
     tr_df, _, _ = pu_label_process_trans(
         TrainingDf, CalibrationDf, EvaluationDf, num_lp, random_state
