@@ -383,6 +383,7 @@ if __name__ == "__main__":
         runs_dir=args.runs_dir,
         bertmodel=args.bertmodel,
     )
+    # python covid_energy_model.py --data_dir /root/autodl-tmp/PU_all_in_one/data/Cochrane_Covid-19 --settings_mode 3 --num_lp 50 --random_state 42 --batch_size 32 --EPOCHS 30 --post_lr 5e-5 --prior_lr 5e-5 --cls_loss_weight 1 --post_loss_weight 0.9 --prior_loss_weight 0.9 --covid_models /root/autodl-tmp/PU_all_in_one/saved_models --runs_dir /root/autodl-tmp/PU_all_in_one/ --bertmodel /root/autodl-tmp/PU_all_in_one/pretrained/allenai/scibert_scivocab_uncased
     # train_em_on_covid(
     #     data_dir=r"/root/autodl-tmp/PU_all_in_one/data/Cochrane_Covid-19",
     #     settings_mode=3,

@@ -302,6 +302,7 @@ if __name__ == "__main__":
         args.epochs,
         args.val_iterations,
     )
+    # python covid_vpu.py --data_dir /root/autodl-tmp/PU_all_in_one/data/Cochrane_Covid-19 --settings_mode 3 --num_lp 50 --random_state 42 --batch_size 32 --bertmodelpath /root/autodl-tmp/PU_all_in_one/pretrained/allenai/scibert_scivocab_uncased --filepath /root/autodl-tmp/PU_all_in_one/saved_models/covid_task/VPU/vpu_model_ckpt.pth --learning_rate 3e-5 --lam 0.1 --mix_alpha 0.1 --epochs 10 --val_iterations 20
     # train_vpu_on_covid(
     #     data_dir=r"/root/autodl-tmp/PU_all_in_one/data/Cochrane_Covid-19",
     #     settings_mode=3,

@@ -235,6 +235,8 @@ if __name__ == "__main__":
         num_epochs=args.num_epochs,
         covid_models=args.covid_models,
     )
+    
+    # python covid_nnpu_cnn.py --data_dir PU_all_in_one/covid_task/Cochrane_COVID-19 --settings_mode 3 --num_lp 50 --random_state 1 --embedding_dim 256 --max_length 512 --batch_size 32 --prior 0.5 --learning_rate 1e-8 --num_epochs 100 --covid_models PU_all_in_one/covid_task/Cochrane_COVID-19/ckpt
     # train_nnpu_on_covid(
     #     data_dir="PU_all_in_one/covid_task/Cochrane_COVID-19",
     #     settings_mode=3,
