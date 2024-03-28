@@ -23,16 +23,16 @@ from utils import (
 
 
 def train_nnpu_on_covid(
-    data_dir,
-    settings_mode,
-    num_lp,
-    random_state,
-    batch_size,
-    prior,
-    learning_rate,
-    num_epochs,
-    covid_models,
-    runs_dir,
+        data_dir,
+        settings_mode,
+        num_lp,
+        random_state,
+        batch_size,
+        prior,
+        learning_rate,
+        num_epochs,
+        covid_models,
+        runs_dir,
 ):
     set_seed(random_state)
     os.makedirs(covid_models, exist_ok=True)
@@ -63,6 +63,9 @@ def train_nnpu_on_covid(
         TrainingDf = parse_data(TrainingIncludes, TrainingExcludes)
         CalibrationDf = parse_data(CalibrationIncludes, CalibrationExcludes)
         EvaluationDf = parse_data(EvaluationIncludes, EvaluationExcludes)
+    else:
+        TrainingDf, CalibrationDf, EvaluationDf = None, None, None
+        print("Invalid settings mode.")
 
     tr_df, _, _ = pu_label_process_trans(
         TrainingDf, CalibrationDf, EvaluationDf, num_lp, random_state
@@ -163,7 +166,7 @@ def train_nnpu_on_covid(
                 )
                 val_prob.append(eval_outputs.squeeze().cpu().numpy())
         val_prob = np.hstack(val_prob)
-        npuu_eval_info_tuple = get_metric(labels=val_labels, prob=val_prob, mode="val")
+        npuu_eval_info_tuple = get_metric(labels=val_labels, prob=val_prob)
         log_metrics(writer, "Validation", npuu_eval_info_tuple, epoch)
         npuu_val_threshold99 = npuu_eval_info_tuple[1]
         if npuu_eval_info_tuple[3] > best_va_f1:
@@ -185,8 +188,6 @@ def train_nnpu_on_covid(
         npuu_test_info_tuple = get_metric(
             labels=test_labels,
             prob=test_prob,
-            threshold99=npuu_val_threshold99,
-            mode="test",
         )
         log_metrics(writer, "Test", npuu_test_info_tuple, epoch)
         if npuu_test_info_tuple[3] > best_ts_f1:

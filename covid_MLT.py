@@ -41,6 +41,9 @@ elif settings_mode == 3:
     TrainingDf = parse_data(TrainingIncludes, TrainingExcludes)
     CalibrationDf = parse_data(CalibrationIncludes, CalibrationExcludes)
     EvaluationDf = parse_data(EvaluationIncludes, EvaluationExcludes)
+else:
+    TrainingDf, CalibrationDf, EvaluationDf = None, None, None
+    print("Invalid settings mode.")
 
 tr_df, _, _ = pu_label_process_trans(
     TrainingDf, CalibrationDf, EvaluationDf, num_lp, random_state
@@ -68,9 +71,9 @@ def generate_data(df):
 bulk(es, generate_data(train_df))
 
 
-def score_test_articles(test_df):
+def score_test_articles(test):
     scores = []
-    for index, row in test_df.iterrows():
+    for index, row in test.iterrows():
         query = {
             "more_like_this": {
                 "fields": ["title", "abstract"],

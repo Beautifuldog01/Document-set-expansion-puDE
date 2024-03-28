@@ -1,9 +1,7 @@
 from tqdm import tqdm
-import numpy as np
 import pandas as pd
 import os
 import random
-import torch
 from RISparser import readris
 from torch.utils.data import Dataset
 from torch.utils.data import Sampler
@@ -137,10 +135,6 @@ class BiDataset(Dataset):
     def __len__(self):
         return len(self.data)
 
-    def normalization(data):
-        _range = np.max(data) - np.min(data)
-        return (data - np.min(data)) / _range
-
 
 class BertDataset(Dataset):
     def __init__(self, encodings, labels):
@@ -158,6 +152,7 @@ class BertDataset(Dataset):
 
 class ProportionalSampler(Sampler):
     def __init__(self, dataset, batch_size, num_cycles):
+        super().__init__()
         self.dataset = dataset
         self.batch_size = batch_size
         self.num_cycles = num_cycles
@@ -194,8 +189,8 @@ class ProportionalSampler(Sampler):
                 )
 
                 if (
-                    len(self.smaller_class) - len(used_smaller_class_indices)
-                    < num_smaller_per_batch
+                        len(self.smaller_class) - len(used_smaller_class_indices)
+                        < num_smaller_per_batch
                 ):
                     used_smaller_class_indices = set()
 

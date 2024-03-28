@@ -2,18 +2,14 @@ import os
 import numpy as np
 import math
 import torch
-import torch.optim as optim
 from torch.utils.data import DataLoader
-from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 from transformers import AutoModel, AutoTokenizer
-from datetime import datetime
 
 from models.vpu import (
     train,
     evaluate,
     NetworkPhi,
-    save_checkpoint,
 )
 
 from data.covid_data_process import (
@@ -23,35 +19,31 @@ from data.covid_data_process import (
     read_ris_file,
 )
 
-from utils import (
-    get_metric,
-    log_metrics,
-    set_seed,
-)
+from utils import set_seed
 
 
 def train_vpu_on_covid(
-    data_dir,
-    settings_mode,
-    num_lp,
-    random_state,
-    batch_size,
-    bertmodelpath,
-    filepath,
-    learning_rate,
-    lam,
-    mix_alpha,
-    epochs,
-    val_iterations,
-    # hidden_size,
-    # EPOCHS,
-    # post_lr,
-    # prior_lr,
-    # cls_loss_weight,
-    # post_loss_weight,
-    # prior_loss_weight,
-    # covid_models,
-    # runs_dir,
+        data_dir,
+        settings_mode,
+        num_lp,
+        random_state,
+        batch_size,
+        bertmodelpath,
+        filepath,
+        learning_rate,
+        lam,
+        mix_alpha,
+        epochs,
+        val_iterations,
+        # hidden_size,
+        # EPOCHS,
+        # post_lr,
+        # prior_lr,
+        # cls_loss_weight,
+        # post_loss_weight,
+        # prior_loss_weight,
+        # covid_models,
+        # runs_dir,
 ):
     set_seed(random_state)
 
@@ -207,7 +199,7 @@ def train_vpu_on_covid(
         #     is_val_var_lowest,
         #     is_test_acc_highest,
         #     filepath,
-        # )
+        #
 
     # inform users model in which epoch is finally picked
     print(

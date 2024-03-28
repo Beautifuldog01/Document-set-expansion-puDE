@@ -278,7 +278,7 @@ def train_em_on_pubmed(
                     )
                     test_prob.append(test_batch_prob.cpu())
             test_prob = torch.hstack(test_prob).numpy()
-            em_test_info_tuple = get_metric(test_labels, test_prob, em_val_threshold99)
+            em_test_info_tuple = get_metric(test_labels, test_prob)
             log_metrics(writer, "Test", em_test_info_tuple, epoch)
             if em_test_info_tuple[3] > best_test_auc:
                 best_test_auc = em_test_info_tuple[3]

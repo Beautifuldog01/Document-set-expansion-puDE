@@ -37,7 +37,7 @@ def get_reduction(preds, labels):
 
 
 def plot_confusion_matrix(
-    cm, classes, normalize=False, title="Confusion matrix", cmap=plt.cm.Blues
+        cm, classes, normalize=False, title="Confusion matrix", cmap=plt.cm.Blues
 ):
     if normalize:
         cm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
@@ -73,10 +73,7 @@ def plot_confusion_matrix(
 def cal_metric(y_true, y_pred):
     cm = confusion_matrix(y_true, y_pred)
     TP = cm[1, 1]
-    FP = cm[0, 1]
-    TN = cm[0, 0]
     FN = cm[1, 0]
-    precision = TP / (TP + FP) if (TP + FP) > 0 else 0
     recall = TP / (TP + FN) if (TP + FN) > 0 else 0
     f1 = f1_score(y_true, y_pred)
     return f1, recall
@@ -161,7 +158,7 @@ def calculate_wss(scores, labels, r=95):
     return wss_r
 
 
-def get_metric(labels, prob, threshold99=None, mode=None):
+def get_metric(labels, prob):
     labels = (
         labels.cpu() if isinstance(labels, torch.Tensor) and labels.is_cuda else labels
     )

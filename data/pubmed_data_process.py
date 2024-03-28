@@ -24,7 +24,7 @@ def parse_pubmed_json(pubmed_json):
 
 
 def load_data(
-    file_path: str, limit: int
+        file_path: str, limit: int
 ):  # -> tuple[NDArray, NDArray, NDArray, NDArray]:
     count = 0
     data = {"titles": [], "abstracts": [], "true_labels": [], "PU_labels": []}
@@ -194,8 +194,8 @@ class ProportionalSampler(Sampler):
                 )
 
                 if (
-                    len(self.smaller_class) - len(used_smaller_class_indices)
-                    < num_smaller_per_batch
+                        len(self.smaller_class) - len(used_smaller_class_indices)
+                        < num_smaller_per_batch
                 ):
                     used_smaller_class_indices = set()
 

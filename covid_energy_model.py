@@ -30,20 +30,20 @@ from utils import (
 
 
 def train_em_on_covid(
-    data_dir,
-    settings_mode,
-    num_lp,
-    random_state,
-    batch_size,
-    EPOCHS,
-    post_lr,
-    prior_lr,
-    cls_loss_weight,
-    post_loss_weight,
-    prior_loss_weight,
-    covid_models,
-    runs_dir,
-    bertmodel,
+        data_dir,
+        settings_mode,
+        num_lp,
+        random_state,
+        batch_size,
+        EPOCHS,
+        post_lr,
+        prior_lr,
+        cls_loss_weight,
+        post_loss_weight,
+        prior_loss_weight,
+        covid_models,
+        runs_dir,
+        bertmodel,
 ):
     set_seed(random_state)
     os.makedirs(covid_models, exist_ok=True)
@@ -72,6 +72,9 @@ def train_em_on_covid(
         TrainingDf = parse_data(TrainingIncludes, TrainingExcludes)
         CalibrationDf = parse_data(CalibrationIncludes, CalibrationExcludes)
         EvaluationDf = parse_data(EvaluationIncludes, EvaluationExcludes)
+    else:
+        TrainingDf, CalibrationDf, EvaluationDf = None, None, None
+        print("Invalid settings mode.")
 
     tr_df, _, _ = pu_label_process_trans(
         TrainingDf, CalibrationDf, EvaluationDf, num_lp, random_state
@@ -184,9 +187,9 @@ def train_em_on_covid(
                 pos_out_post = post_model(pos_post)
                 neg_out_post = post_model(neg_post)
                 loss_post = (
-                    neg_out_post
-                    - pos_out_post
-                    + 0.1 * (pos_out_post**2 + neg_out_post**2)
+                        neg_out_post
+                        - pos_out_post
+                        + 0.1 * (pos_out_post ** 2 + neg_out_post ** 2)
                 ).mean()
             else:
                 loss_post = torch.tensor([0], dtype=torch.float32).to(device)
@@ -201,17 +204,17 @@ def train_em_on_covid(
                 pos_out_prior = prior_model(pos_prior)
                 neg_out_prior = prior_model(neg_prior)
                 loss_prior = (
-                    neg_out_prior
-                    - pos_out_prior
-                    + 0.1 * (pos_out_prior**2 + neg_out_prior**2)
+                        neg_out_prior
+                        - pos_out_prior
+                        + 0.1 * (pos_out_prior ** 2 + neg_out_prior ** 2)
                 ).mean()
             else:
                 loss_prior = torch.tensor([0], dtype=torch.float32).to(device)
 
             los_sum = (
-                cls_loss_weight * cls_loss
-                + post_loss_weight * loss_post
-                + prior_loss_weight * loss_prior
+                    cls_loss_weight * cls_loss
+                    + post_loss_weight * loss_post
+                    + prior_loss_weight * loss_prior
             )
             los_sum.backward()
             torch.nn.utils.clip_grad_norm_(post_model.parameters(), max_norm=0.1)
@@ -271,7 +274,7 @@ def train_em_on_covid(
                 )
                 test_prob.append(test_batch_prob.cpu())
         test_prob = torch.hstack(test_prob).numpy()
-        em_test_info_tuple = get_metric(test_labels, test_prob, em_val_threshold99)
+        em_test_info_tuple = get_metric(test_labels, test_prob)
         log_metrics(writer, "Test", em_test_info_tuple, epoch)
         if em_test_info_tuple[3] > best_test_auc:
             best_test_auc = em_test_info_tuple[3]
