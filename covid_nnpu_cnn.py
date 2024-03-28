@@ -15,7 +15,7 @@ from utils import (
 )
 
 from torch.utils.tensorboard import SummaryWriter
-from models.nnPU_CNN import TextClassifier, NonNegativePULoss
+from models.nnPU_cnn import TextClassifier, NonNegativePULoss
 
 import os
 import torch
