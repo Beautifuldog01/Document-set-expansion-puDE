@@ -19,7 +19,7 @@ for DSE. Code is available from https://github.com/Beautifuldog01/Document-set-e
 The code is written in Python 3.10. To install the required packages, you need have [Conda](https://docs.anaconda.com/free/miniconda/) installed. You can then create a new environment with the required packages using the following command:
 
 ```zsh
-conda create --name pypu python=3.10 --file requirements.txt
+conda create --name pypu --file requirements.txt
 conda activate pypu
 ```
 
