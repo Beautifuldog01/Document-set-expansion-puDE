@@ -11,6 +11,7 @@ from data.covid_data_process import (
 from utils import (
     get_metric,
     set_seed,
+    print_metrics,
 )
 
 es = Elasticsearch("http://127.0.0.1:9200", verify_elasticsearch=False)
@@ -122,4 +123,4 @@ metrics = [
     "recall10",
     "recall20",
 ]
-print(metrics, MLT_test_info_tuple)
+print_metrics(metrics, MLT_test_info_tuple)
