@@ -401,19 +401,3 @@ if __name__ == "__main__":
         args.runs_dir,
         args.bert_model_path,
     )
-    # python pubmed_energy_model.py --batch_size 32 --num_epochs 10 --experiment_list 1 --prior 0.5 --pubmed_models saved_models/pubmed_models/ --seed 42 --post_lr 1e-4 --prior_lr 1e-4 --cls_loss_weight 1.0 --post_loss_weight 0.9 --prior_loss_weight 0.9 --runs_dir /root/autodl-tmp/PU_all_in_one/ --bert_model_path allenai/scibert_scivocab_uncased --data_dir data/pubmed-dse
-    # train_em_on_pubmed(
-    #     batch_size=32,
-    #     num_epochs=10,
-    #     experiment_list=[1],
-    #     prior=0.5,
-    #     pubmed_models=r"/root/autodl-tmp/PU_all_in_one/saved_models/pubmed_models/",
-    #     seed=42,
-    #     post_lr=1e-4,
-    #     prior_lr=1e-4,
-    #     cls_loss_weight=1.0,
-    #     post_loss_weight=0.9,
-    #     prior_loss_weight=0.9,
-    #     runs_dir="/root/autodl-tmp/PU_all_in_one/",
-    #     bert_model_path=r"/root/autodl-tmp/PU_all_in_one/pretrained/allenai/scibert_scivocab_uncased",
-    # )
