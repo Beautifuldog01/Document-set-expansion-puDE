@@ -85,15 +85,15 @@ class PUModelWithSciBERT(nn.Module):
         self.sci_bert = model
         embedding_size = self.sci_bert.config.hidden_size
 
-        self.fc1 = nn.Linear(embedding_size, 256, bias=False)
-        self.bn1 = nn.BatchNorm1d(256)
-        self.fc2 = nn.Linear(256, 128, bias=False)
-        self.bn2 = nn.BatchNorm1d(128)
-        self.fc3 = nn.Linear(128, 64, bias=False)
-        self.bn3 = nn.BatchNorm1d(64)
-        self.fc4 = nn.Linear(64, 32, bias=False)
-        self.bn4 = nn.BatchNorm1d(32)
-        self.fc5 = nn.Linear(32, 1)
+        self.fc1 = nn.Linear(embedding_size, 512, bias=False)
+        self.bn1 = nn.BatchNorm1d(512)
+        self.fc2 = nn.Linear(512, 256, bias=False)
+        self.bn2 = nn.BatchNorm1d(256)
+        self.fc3 = nn.Linear(256, 128, bias=False)
+        self.bn3 = nn.BatchNorm1d(128)
+        self.fc4 = nn.Linear(128, 64, bias=False)
+        self.bn4 = nn.BatchNorm1d(64)
+        self.fc5 = nn.Linear(64, 1)
 
     def forward(self, input_ids, attention_mask, token_type_ids):
         sequence_output = self.sci_bert(
