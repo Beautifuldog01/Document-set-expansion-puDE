@@ -181,12 +181,11 @@ python pubmed_energy_model.py \
 Please cite our paper if you use this code in your own work:
 
 ```bibtex
-@misc{zhang2024document,
-      title={Document Set Expansion with Positive-Unlabelled Learning Using Intractable Density Estimation}, 
-      author={Haiyang Zhang and Qiuyi Chen and Yuanjie Zou and Yushan Pan and Jia Wang and Mark Stevenson},
-      year={2024},
-      eprint={2403.17473},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR}
+@inproceedings{zhang2024document,
+  title={Document Set Expansion with Positive-Unlabeled Learning Using Intractable Density Estimation},
+  author={Zhang, Haiyang and Chen, Qiuyi and Zou, Yanjie and Wang, Jia and Pan, Yushan and Stevenson, Mark},
+  booktitle={Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024)},
+  pages={5167--5173},
+  year={2024}
 }
 ```
