@@ -1,6 +1,6 @@
 # Document-set-expansion-puDE
 
-This repository contains the code for the paper ["Document Set Expansion with Positive-Unlabelled Learning Using Intractable Density Estimation" (COLING 2024)](https://arxiv.org/pdf/2403.17473.pdf).
+This repository contains the code for the paper ["Document Set Expansion with Positive-Unlabelled Learning Using Intractable Density Estimation" (COLING 2024)](https://aclanthology.org/2024.lrec-main.460.pdf).
 
 ## Abstract
 
